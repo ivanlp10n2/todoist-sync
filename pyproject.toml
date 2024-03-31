@@ -12,18 +12,14 @@ license = "MIT"
 # Dependency definitions for your project
 [tool.poetry.dependencies]
 python = "^3.12"
-# List your project's dependencies here
-# For example, if your project depends on requests and todoist-python, you might add:
-requests = "*"
-todoist-python = "*"
+requests = "^2.28.0"
+python-dotenv = "^0.21.0"
 
-# Development dependencies (such as linters, testing frameworks, etc.)
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+pytest = "^8.1.1"# If your package is meant to provide command-line executables, configure them like so:
 
-# If your package is meant to provide command-line executables, configure them like so:
 [tool.poetry.scripts]
-my-project-cli = "todoist_sync.main:main"  # Adjust the module path and function as needed
+start = "todoist_sync.main:main"  # Adjust the module path and function as needed
 
 # Optional dependencies can be configured as extras for optional features
 [tool.poetry.extras]
@@ -34,4 +30,7 @@ cli = ["click", "rich"]
 Homepage = "https://example.com"
 Repository = "https://github.com/yourusername/my-project.git"
 Documentation = "https://readthedocs.org/projects/my-project/"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
 
