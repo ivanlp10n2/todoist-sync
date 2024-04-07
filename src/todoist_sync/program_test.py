@@ -4,6 +4,7 @@ from todoist_sync.program import sync_new_month
 from typing import List, Dict
 from todoist_sync.program import sync_new_month
 from todoist_sync.todoist_api import TodoistAPI, Project, Category, Task
+from returns.future import Future
 
 class MockTodoistAPI(TodoistAPI):
     def __init__(self):
@@ -14,28 +15,28 @@ class MockTodoistAPI(TodoistAPI):
         self.category_id_counter = 1
         self.task_id_counter = 1
 
-    def get_projects(self) -> List[Project]:
+    def get_projects(self) -> Future[List[Project]]:
         return self.projects
 
-    def get_project_categories(self, project_id: int) -> List[Category]:
+    def get_project_categories(self, project_id: int) -> Future[List[Category]]:
         return self.categories.get(project_id, [])
 
-    def get_tasks(self, category_id: int) -> List[Task]:
+    def get_tasks(self, category_id: int) -> Future[List[Task]]:
         return self.tasks.get(category_id, [])
 
-    def create_project(self, name: str) -> Project:
+    def create_project(self, name: str) -> Future[Project]:
         project = Project(id=self.project_id_counter, name=name)
         self.project_id_counter += 1
         self.projects.append(project)
         return project
 
-    def create_category(self, project_id: int, name: str) -> Category:
+    def create_category(self, project_id: int, name: str) -> Future[Category]:
         category = Category(id=self.category_id_counter, name=name)
         self.category_id_counter += 1
         self.categories.setdefault(project_id, []).append(category)
         return category
 
-    def move_task(self, task_id: int, category_id: int) -> None:
+    def move_task(self, task_id: int, category_id: int) -> Future[None]:
         for project_id, tasks in self.tasks.items():
             task = next((t for t in tasks if t.id == task_id), None)
             if task:
@@ -43,7 +44,7 @@ class MockTodoistAPI(TodoistAPI):
                 self.tasks.setdefault(category_id, []).append(task)
                 break
 
-    def copy_task(self, task_id: int, category_id: int) -> None:
+    def copy_task(self, task_id: int, category_id: int) -> Future[None]:
         for project_id, tasks in self.tasks.items():
             task = next((t for t in tasks if t.id == task_id), None)
             if task:
@@ -62,7 +63,7 @@ class MockTodoistAPI(TodoistAPI):
                 break
 
 
-def test_sync_new_month():
+def test_sync_new_month()-> None:
     # Create an instance of the mock TodoistAPI
     todoist_api = MockTodoistAPI()
 

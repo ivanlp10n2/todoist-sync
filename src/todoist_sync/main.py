@@ -13,7 +13,7 @@ def main():
     zz = sync_new_month(todoist_api, new_project_name, old_project_name)
     
     try:
-        sync_report = zz
+        sync_report = zz.apply()
         print("Sync Report:")
         print(sync_report)
     except Exception as e:
